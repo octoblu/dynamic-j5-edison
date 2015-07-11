@@ -5,10 +5,14 @@ var meshblu = require("meshblu");
 var meshbluJSON = require("./meshblu.json");
 var fs = require("fs");
 var _ = require("underscore");
-var intel = require("galileo-io");
 var five = require("johnny-five");
+var intel = require("galileo-io");
 var board = new five.Board();
 var debug = require('debug')('dynamic');
+
+var board = new five.Board({
+    io: new intel()
+  });
 
 var names = [];
 var component = {};
@@ -16,6 +20,7 @@ var functions = [];
 var read = {};
 var components;
 var servo = [];
+var servo_i2c = [];
 // Specifies how you want your message payload to be passed
 // from Octoblu to your device
 
@@ -134,8 +139,9 @@ conn.on("notReady", function(data) {
 
 var testOptions = {
   "components": [{
-    "name": "Led_Pin_13",
-    "action": "digitalWrite"
+    "name": "servo",
+    "action": "PCA9685-Servo",
+    "pin": "1"
   }]
 };
 
@@ -154,14 +160,10 @@ conn.on('ready', function(data) {
   // board-specific code
 
 
-  var board = new five.Board({
-      io: new intel()
-    });
+
 
 
   board.on('ready', function() {
-
-
 
 
     conn.whoami({}, function(data) {
@@ -208,6 +210,7 @@ conn.on('ready', function(data) {
 
         component = [];
         servo = [];
+        servo_i2c = [];
         names = [];
         read = {};
 
@@ -265,10 +268,10 @@ conn.on('ready', function(data) {
               names.push(payload.name);
               break;
             case "PCA9685-Servo":
-              servo[payload.name] = new five.Servo({
-                address: 0x40,
+              var spin = parseInt(payload.pin);
+              servo_i2c[payload.name] = new five.Servo({
                 controller: "PCA9685",
-                pin: payload.pin,
+                pin: spin
               });
               names.push(payload.name);
               break;
@@ -325,8 +328,8 @@ conn.on('ready', function(data) {
           servo[payload.name].to(value);
           break;
         case "PCA9685-Servo":
-          servo[payload.name].stop();
-          servo[payload.name].to(value);
+          servo_i2c[payload.name].stop();
+          servo_i2c[payload.name].to(value);
           break;
       } //end switch case
     }
