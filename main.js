@@ -7,7 +7,6 @@ var fs = require("fs");
 var _ = require("underscore");
 var five = require("johnny-five");
 var intel = require("galileo-io");
-var board = new five.Board();
 var debug = require('debug')('dynamic');
 
 var board = new five.Board({
