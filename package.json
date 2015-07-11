@@ -1,0 +1,19 @@
+{
+  "name": "dynamic-j5-edison",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "debug": "^2.2.0",
+    "johnny-five": "^0.8.58",
+    "meshblu": "^1.21.0",
+    "galileo-io": "*",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "exit 0"
+  },
+  "author": "Octoblu <dev@octoblu.com>",
+  "license": "MIT"
+}
