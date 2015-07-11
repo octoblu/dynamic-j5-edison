@@ -8,11 +8,6 @@ var _ = require("underscore");
 var five = require("johnny-five");
 var intel = require("galileo-io");
 var debug = require('debug')('dynamic');
-
-var board = new five.Board({
-    io: new intel()
-  });
-
 var names = [];
 var component = {};
 var functions = [];
@@ -158,6 +153,10 @@ conn.on('ready', function(data) {
   // Wait for the board to be ready for message passing
   // board-specific code
 
+
+  var board = new five.Board({
+      io: new intel()
+    });
 
 
 
