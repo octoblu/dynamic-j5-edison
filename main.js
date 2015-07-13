@@ -115,7 +115,7 @@ conn.on("notReady", function(data) {
 
   // Register a device
   conn.register({
-    "type": "dynamic-j5-edison"
+    "type": "edison"
   }, function(data) {
     debug('registered device', data);
     meshbluJSON.uuid = data.uuid;
