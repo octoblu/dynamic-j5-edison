@@ -136,9 +136,9 @@ conn.on("notReady", function(data) {
 
 var testOptions = {
   "components": [{
-    "name": "servo",
-    "action": "PCA9685-Servo",
-    "pin": "1"
+    "name": "some_action",
+    "action": "",
+    "pin": ""
   }]
 };
 
