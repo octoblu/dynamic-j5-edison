@@ -360,21 +360,22 @@ conn.on('ready', function(data) {
       } //end switch case
     }
 
-    setInterval(function() {
-
-      if (!(_.isEmpty(read))) {
-        debug(read);
-
-        conn.message({
-          "devices": "*",
-          "payload": read
-        });
-
-      }
-
-
-    }, 500);
-
 
   }); // end johnny-five board onReady
+
+  setInterval(function() {
+
+    if (!(_.isEmpty(read))) {
+      debug(read);
+
+      conn.message({
+        "devices": "*",
+        "payload": read
+      });
+
+    }
+
+
+  }, 500);
+
 }); // end Meshblu connection onReady
