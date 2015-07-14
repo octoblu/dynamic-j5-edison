@@ -251,9 +251,9 @@ conn.on('ready', function(data) {
               names.push(payload.name);
               break;
             case "analogRead":
-
-              board.pinMode(payload.pin, five.Pin.ANALOG);
-              board.analogRead(payload.pin, function(value) {
+              var analog_pin = "A" + payload.pin;
+              board.pinMode(analog_pin, five.Pin.ANALOG);
+              board.analogRead(analog_pin, function(value) {
                 if(_.has(component, payload.name)){
                 read[payload.name] = value;
                 }
