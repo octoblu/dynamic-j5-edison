@@ -18,6 +18,9 @@ var components;
 var servo = [];
 var servo_i2c = [];
 var oled = [];
+var lcd = [];
+var scroller = [];
+
 // Specifies how you want your message payload to be passed
 // from Octoblu to your device
 
@@ -59,7 +62,7 @@ var OPTIONS_SCHEMA = {
           "action": {
             "title": "Action",
             "type": "string",
-            "enum": ["digitalWrite", "digitalRead", "analogWrite", "analogRead", "servo", "PCA9685-Servo", "oled-i2c"],
+            "enum": ["digitalWrite", "digitalRead", "analogWrite", "analogRead", "servo", "PCA9685-Servo", "oled-i2c", "LCD-PCF8574A", "LCD-JHD1313M1"],
             "required": true
           },
           "pin": {
@@ -215,6 +218,9 @@ conn.on('ready', function(data) {
         names = [];
         read = {};
         oled = [];
+        lcd = [];
+        scroller = [];
+
 
         if (_.has(data.options, "components")) {
           components = data.options.components;
@@ -292,6 +298,26 @@ conn.on('ready', function(data) {
                   oled[payload.name].update();
                   names.push(payload.name);
               break;
+            case "LCD-PCF8574A":
+                lcd[payload.name] = new five.LCD({
+                              controller: "PCF8574A",
+                              rows: 2,
+                              cols: 16
+                              });
+                lcd[payload.name].cursor(0, 0).print("Skynet Lives");
+                names.push(payload.name);
+
+              break;
+            case "LCD-JHD1313M1":
+                lcd[payload.name] = new five.LCD({
+                              controller: "JHD1313M1",
+                              rows: 2,
+                              cols: 16
+                              });
+                lcd[payload.name].cursor(0, 0).print("Skynet Lives");
+                names.push(payload.name);
+              break;
+
 
 
           } //end switch case
@@ -356,6 +382,24 @@ conn.on('ready', function(data) {
           oled[payload.name].update();
           oled[payload.name].setCursor(1, 1);
           oled[payload.name].writeString(font, 3, payload.value , 1, true);
+          break;
+        case "LCD-PCF8574A":
+            lcd[payload.name].clear();
+            if(payload.value.length <= 16){
+            lcd[payload.name].cursor(0,0).noAutoscroll().print(payload.value);
+          }else if (payload.value.length > 16){
+            lcd[payload.name].cursor(0,0).print(payload.value.substring(0,16));
+            lcd[payload.name].cursor(1,0).print(payload.value.substring(16,33));
+          }
+          break;
+        case "LCD-JHD1313M1":
+            lcd[payload.name].clear();
+            if(payload.value.length <= 16){
+            lcd[payload.name].cursor(0,0).noAutoscroll().print(payload.value);
+          }else if (payload.value.length > 16){
+            lcd[payload.name].cursor(0,0).print(payload.value.substring(0,16));
+            lcd[payload.name].cursor(1,0).print(payload.value.substring(16,33));
+          }
           break;
       } //end switch case
     }
